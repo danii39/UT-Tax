@@ -1,0 +1,38 @@
+/* Responsive font sizes */
+body, input, button, #resultBox {
+    font-size: 1em; 
+}
+
+input[type="text"], #resultBox, button {
+    width: 80%; /* Use a percentage instead of fixed pixel value */
+    max-width: 240px; /* Set a maximum width for larger screens */
+}
+
+/* Responsive navigation bar */
+.navbar {
+    padding: 10px; /* Adjust padding */
+}
+
+/* Responsive about paragraph */
+#aboutParagraph {
+    padding: 20px; /* Adjust padding */
+    width: 90%; /* Use a percentage instead of fixed pixel value */
+    max-width: 800px; /* Set a maximum width for larger screens */
+}
+
+/* Media query for small devices */
+@media only screen and (max-width: 600px) {
+    input[type="text"], #resultBox, button {
+        font-size: 1em; /* Adjust font size */
+        padding: 15px; /* Adjust padding */
+    }
+
+    .navbar {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align items to the start */
+    }
+
+    .language-dropdown {
+        margin-top: 10px; /* Add space between items */
+    }
+}
