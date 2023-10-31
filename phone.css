@@ -29,7 +29,8 @@ input[type="text"], #resultBox, button {
 
     .navbar {
         flex-direction: column; /* Stack items vertically */
-        align-items: flex-start; /* Align items to the start */
+        align-items: center; /* Align items to the start */
+        justify-content: center;
     }
 
     .language-dropdown {
