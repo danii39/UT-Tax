@@ -28,7 +28,7 @@ input[type="text"], #resultBox, button {
     }
 
     .navbar {
-        flex-direction: column; /* Stack items vertically */
+        flex-direction: row; /* Stack items vertically */
         align-items: center; /* Align items to the start */
         justify-content: center;
     }
