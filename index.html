@@ -1,98 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EA FC Ultimate Team Profit Calculator</title>
+    <title>UT Profit Calculator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="phone.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Set "Times New Roman" as the font for all text elements */
-        body, input, button, #resultBox {
-            font-family: "Times New Roman", Times, serif;
-        }
-
-        /* Center the content */
         body {
-            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Adjust to move content closer to the top */
+            justify-content: flex-start;
             height: 100vh;
             margin: 0;
+            background-color: #F5F5F7;
+            color: #333;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
+        input, button, #resultBox {
+            font-family: inherit;
+            font-size: 18px;
         }
-        /* Style the input and button */
-        input[type="text"] {
-            padding: 12px; /* Slightly larger padding for text boxes */
-            width: 240px; /* Slightly wider text boxes */
+
+        input[type="text"], #resultBox {
+            padding: 12px;
+            width: 280px;
             border: 1px solid #ccc;
-            font-size: 16px; /* Set a smaller font size for the input */
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         button {
-            margin: 10px 0; /* Adjust top and bottom margin */
-            padding: 12px 24px; /* Slightly larger padding for buttons */
-            background-color: #007BFF;
+            padding: 12px 24px;
+            background-color: #0071E3;
             color: white;
             border: none;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px; /* Set a smaller font size for the button */
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        /* Style the result text box */
-        #resultBox {
-            margin-top: 10px; /* Adjust to move the result box closer to the input */
-            padding: 12px; /* Slightly larger padding for the result text box */
-            border: 1px solid #ccc;
-            width: 240px; /* Slightly wider result text box */
-            font-size: 16px; /* Set a smaller font size for the result text box */
+            font-size: 18px;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Style for the navigation bar */
+        button:hover {
+            background-color: #005bb5;
+        }
+
         .navbar {
             display: flex;
-            justify-content: flex-end; /* Push content to the right */
+            justify-content: flex-end;
             align-items: center;
-            background-color: black;
+            background-color: #333;
             width: 100%;
-            margin: 0;
-            padding: 10px 50px 10px 0px;
+            padding: 10px 50px;
+            box-sizing: border-box;
         }
 
         .moon-emoji {
             font-size: 24px;
             cursor: pointer;
-            color: #ffffff; /* Moon emoji color */
-            margin-right: 10px; /* Add margin to create space */
-        }
-
-        .spacer {
-            width: 10px; /* Width of the spacer to create space */
+            color: #ffffff;
+            margin-right: 10px;
         }
 
         .language-dropdown {
             position: relative;
-            display: inline-block;
         }
 
         .language-toggle {
-            background-color: #007BFF; /* Button color */
+            background-color: #0071E3;
             color: white;
             border: none;
             padding: 5px 10px;
             cursor: pointer;
             font-size: 14px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .language-dropdown-content {
             display: none;
             position: absolute;
-            background-color: #333;
+            background-color: #fff;
+            border: 1px solid #ccc;
             min-width: 160px;
-            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             z-index: 1;
         }
 
@@ -102,142 +98,119 @@
 
         .language-option {
             padding: 12px 16px;
-            color: white;
-            text-align: left;
+            color: #333;
             text-decoration: none;
             display: block;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         .language-option:hover {
-            background-color: #555;
+            background-color: #f1f1f1;
         }
 
-        .language-option .flag-icon {
-            display: none; /* Hide flags */
-        }
-        
-        /* Style for the about paragraph */
         #aboutParagraph {
-            max-width: 800px; /* Adjust the width as needed */
-            margin: 20px auto; /* Center the paragraph horizontally and add margin */
-            text-align: left; /* Align text to the left within the paragraph */
-            padding: 0 20px; /* Add some padding to the paragraph content */
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            text-align: left;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px 20px;
+            }
         }
     </style>
     <script>
-        var isDarkMode = true; // Initialize as true for "Dark" mode
-        var currentLanguage = 'en'; // Default language is English
+        var isDarkMode = false;
+        var currentLanguage = 'en';
 
-var languageContent = {
-    'en': {
-        'pageTitle': 'Ultimate Team Profit Calculator',
-        'sellingPriceLabel': 'Enter the card\'s selling price:',
-        'calculateButton': 'Calculate',
-        'resultLabel': 'Profit after tax:',
-        'aboutHeader': 'About',
-        'aboutParagraph': 'Welcome to our EA FC 24 Ultimate Team (UT) Tax Calculator – a tool made to help players calculate their market transactions. Our platform calculates the 5% transaction tax imposed by EAFC, letting you know how much profit you will make after selling a card on the Transfer Market. Simply enter the selling price of your player or item, and let our tool do the rest. This is the first release of the website, but we will continue to add new tools and updates throughout.'
-    },
-    'es': {
-    'pageTitle': 'Calculadora de ganancias de Ultimate Team',
-    'sellingPriceLabel': 'Ingrese el precio de venta de la tarjeta:',
-    'calculateButton': 'Calcular',
-    'resultLabel': 'Ganancia después de impuestos:',
-    'aboutHeader': 'Acerca de',
-    'aboutParagraph': 'Bienvenido a nuestra Calculadora de Impuestos del Ultimate Team de EA FC 24, una herramienta diseñada para ayudar a los jugadores a calcular sus ganancias después de vender una carta en el Mercado de Transferencias. Nuestra plataforma calcula el impuesto de transacción del 5% impuesto por EAFC, lo que te permite saber cuánto ganarás después de vender una carta en el Mercado de Transferencias. Simplemente ingresa el precio de venta de tu jugador o artículo y deja que nuestra herramienta haga el resto. Esta es la primera versión del sitio web, pero continuaremos agregando nuevas herramientas y actualizaciones en el futuro.'
-},
+        var languageContent = {
+            'en': {
+                'pageTitle': 'Ultimate Team Profit Calculator',
+                'sellingPriceLabel': 'Enter the card\'s selling price:',
+                'calculateButton': 'Calculate',
+                'resultLabel': 'Profit after tax:',
+                'aboutHeader': 'About',
+                'aboutParagraph': 'Welcome to our EA FC 24 Ultimate Team (UT) Tax Calculator – a tool made to help players calculate their market transactions. Our platform calculates the 5% transaction tax imposed by EAFC, letting you know how much profit you will make after selling a card on the Transfer Market. Simply enter the selling price of your player or item, and let our tool do the rest. This is the first release of the website, but we will continue to add new tools and updates throughout.'
+            },
+            'es': {
+                'pageTitle': 'Calculadora de ganancias de Ultimate Team',
+                'sellingPriceLabel': 'Ingrese el precio de venta de la tarjeta:',
+                'calculateButton': 'Calcular',
+                'resultLabel': 'Ganancia después de impuestos:',
+                'aboutHeader': 'Sobre',
+                'aboutParagraph': 'Bienvenido a nuestra Calculadora de Impuestos del Ultimate Team de EA FC 24, una herramienta diseñada para ayudar a los jugadores a calcular sus ganancias después de vender una carta en el Mercado de Transferencias. Nuestra plataforma calcula el impuesto de transacción del 5% impuesto por EAFC, lo que te permite saber cuánto ganarás después de vender una carta en el Mercado de Transferencias. Simplemente ingresa el precio de venta de tu jugador o artículo y deja que nuestra herramienta haga el resto. Esta es la primera versión del sitio web, pero continuaremos agregando nuevas herramientas y actualizaciones en el futuro.'
+            },
+            'pt': {
+                'pageTitle': 'Calculadora de Lucro do Ultimate Team',
+                'sellingPriceLabel': 'Digite o preço de venda do cartão:',
+                'calculateButton': 'Calcular Preço de Compra',
+                'resultLabel': 'Lucro após impostos:',
+                'aboutHeader': 'Sobre',
+                'aboutParagraph': 'Bem-vindo à nossa Calculadora de Imposto do Ultimate Team da EA FC 24 - uma ferramenta feita para ajudar os jogadores a calcular suas transações no mercado. Nossa plataforma calcula a taxa de transação de 5% imposta pela EAFC, informando a você quanto lucro você fará após vender um cartão no Mercado de Transferências. Basta inserir o preço de venda do seu jogador ou item e deixar nossa ferramenta fazer o resto. Esta é a primeira versão do site, mas continuaremos a adicionar novas ferramentas e atualizações ao longo do tempo.'
+            },
+            'fr': {
+                'pageTitle': 'Calculateur de profit Ultimate Team',
+                'sellingPriceLabel': 'Entrez le prix de vente de la carte :',
+                'calculateButton': 'Calculer le prix d\'achat',
+                'resultLabel': 'Profit après impôts :',
+                'aboutHeader': 'À propos',
+                'aboutParagraph': 'Bienvenue sur notre Calculatrice de Taxes Ultimate Team EA FC 24 - un outil conçu pour aider les joueurs à calculer leurs transactions sur le marché. Notre plateforme calcule la taxe de transaction de 5 % imposée par EAFC, vous permettant de savoir à quel prix vous devriez chasser et vendre le joueur si vous souhaitez réaliser un profit. Il vous suffit d\'entrer le prix de vente de votre joueur ou de votre objet, et laissez notre outil faire le reste. Il s\'agit de la première version du site, mais nous continuerons à ajouter de nouveaux outils et mises à jour au fil du temps.'
+            },
+            'it': {
+                'pageTitle': 'Calcolatore del profitto del Ultimate Team',
+                'sellingPriceLabel': 'Inserisci il prezzo di vendita della carta:',
+                'calculateButton': 'Calcola il prezzo di acquisto',
+                'resultLabel': 'Profitto dopo le tasse:',
+                'aboutHeader': 'Informazioni',
+                'aboutParagraph': 'Benvenuti nel nostro Calcolatore Fiscale del Ultimate Team EA FC 24 - uno strumento creato per aiutare i giocatori a calcolare le loro transazioni di mercato. La nostra piattaforma calcola l\'imposta di transazione del 5% imposta da EAFC, consentendovi di sapere a quale prezzo dovreste cacciare e vendere il giocatore se volete ottenere un profitto. Basta inserire il prezzo di vendita del vostro giocatore o oggetto e lasciate che il nostro strumento faccia il resto. Questa è la prima versione del sito, ma continueremo ad aggiungere nuovi strumenti e aggiornamenti nel tempo.'
+            }
+        };
 
-    'pt': {
-        'pageTitle': 'Calculadora de Lucro do Ultimate Team',
-        'sellingPriceLabel': 'Digite o preço de venda do cartão:',
-        'calculateButton': 'Calcular Preço de Compra',
-        'resultLabel': 'Lucro após impostos:',
-        'aboutHeader': 'Sobre',
-        'aboutParagraph': 'Bem-vindo à nossa Calculadora de Imposto do Ultimate Team da EA FC 24 - uma ferramenta feita para ajudar os jogadores a calcular suas transações no mercado. Nossa plataforma calcula a taxa de transação de 5% imposta pela EAFC, informando a você quanto lucro você fará após vender um cartão no Mercado de Transferências. Basta inserir o preço de venda do seu jogador ou item e deixar nossa ferramenta fazer o resto. Esta é a primeira versão do site, mas continuaremos a adicionar novas ferramentas e atualizações ao longo do tempo.'
-    },
-    'fr': {
-        'pageTitle': 'Calculateur de profit Ultimate Team',
-        'sellingPriceLabel': 'Entrez le prix de vente de la carte :',
-        'calculateButton': 'Calculer le prix d\'achat',
-        'resultLabel': 'Profit après impôts :',
-        'aboutHeader': 'À propos',
-        'aboutParagraph': 'Bienvenue sur notre Calculatrice de Taxes Ultimate Team EA FC 24 - un outil conçu pour aider les joueurs à calculer leurs transactions sur le marché. Notre plateforme calcule la taxe de transaction de 5 % imposée par EAFC, vous permettant de savoir à quel prix vous devriez chasser et vendre le joueur si vous souhaitez réaliser un profit. Il vous suffit d\'entrer le prix de vente de votre joueur ou de votre objet, et laissez notre outil faire le reste. Il s\'agit de la première version du site, mais nous continuerons à ajouter de nouveaux outils et mises à jour au fil du temps.'
-    },
-    'it': {
-        'pageTitle': 'Calcolatore del profitto del Ultimate Team',
-        'sellingPriceLabel': 'Inserisci il prezzo di vendita della carta:',
-        'calculateButton': 'Calcola il prezzo di acquisto',
-        'resultLabel': 'Profitto dopo le tasse:',
-        'aboutHeader': 'Informazioni',
-        'aboutParagraph': 'Benvenuti nel nostro Calcolatore Fiscale del Ultimate Team EA FC 24 - uno strumento creato per aiutare i giocatori a calcolare le loro transazioni di mercato. La nostra piattaforma calcola l\'imposta di transazione del 5% imposta da EAFC, consentendovi di sapere a quale prezzo dovreste cacciare e vendere il giocatore se volete ottenere un profitto. Basta inserire il prezzo di vendita del vostro giocatore o oggetto e lasciate che il nostro strumento faccia il resto. Questa è la prima versione del sito, ma continueremo ad aggiungere nuovi strumenti e aggiornamenti nel tempo.'
-    }
-};
-
-
-
-
-        // Function to toggle between Light and Dark modes
         function toggleMode() {
             isDarkMode = !isDarkMode;
             updateMode();
         }
 
-        // Function to update the mode based on the current state
         function updateMode() {
             if (isDarkMode) {
                 document.body.style.backgroundColor = '#333';
                 document.body.style.color = 'white';
             } else {
-                document.body.style.backgroundColor = 'white';
-                document.body.style.color = 'black';
+                document.body.style.backgroundColor = '#F5F5F7';
+                document.body.style.color = '#333';
             }
         }
 
-        // Function to change the language
-function changeLanguage(lang) {
-    currentLanguage = lang;
-    updateContent();
-    
-    // Hide all language-specific "About" headers
-    var languages = ['en', 'es', 'pt', 'fr', 'it'];
-    languages.forEach(function (language) {
-        document.getElementById('aboutHeader-' + language).style.display = 'none';
-    });
-    
-    // Show the "About" header for the selected language
-    document.getElementById('aboutHeader-' + lang).style.display = 'block';
-}
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            updateContent();
 
+            var languages = ['en', 'es', 'pt', 'fr', 'it'];
+            languages.forEach(function (language) {
+                document.getElementById('aboutHeader-' + language).style.display = (language === lang) ? 'block' : 'none';
+            });
+        }
 
-        // Function to update the content based on the selected language
-function updateContent() {
-    var content = languageContent[currentLanguage];
+        function updateContent() {
+            document.getElementById('pageTitle').textContent = languageContent[currentLanguage].pageTitle;
+            document.getElementById('sellingPriceLabel').textContent = languageContent[currentLanguage].sellingPriceLabel;
+            document.getElementById('calculateButton').textContent = languageContent[currentLanguage].calculateButton;
+            document.getElementById('resultLabel').textContent = languageContent[currentLanguage].resultLabel;
+            document.getElementById('aboutParagraph').textContent = languageContent[currentLanguage].aboutParagraph;
+        }
 
-    // Update page title
-    document.title = content['pageTitle'];
-
-    // Update text content
-    document.getElementById('pageTitle').textContent = content['pageTitle'];
-    document.getElementById('sellingPriceLabel').textContent = content['sellingPriceLabel'];
-    document.getElementById('calculateButton').textContent = content['calculateButton'];
-    document.getElementById('resultLabel').textContent = content['resultLabel'];
-    document.getElementById('aboutParagraph').textContent = content['aboutParagraph'];
-
-    // Update the input placeholder text
-    document.getElementById('cardSellPrice').setAttribute('placeholder', content['sellingPriceLabel']);
-}
-
-
-        // Calculate function
         function calculate() {
             var cardSellPrice = document.getElementById('cardSellPrice').value.replace(/,/g, '');
             var numericCardSellPrice = parseFloat(cardSellPrice);
 
             if (!isNaN(numericCardSellPrice)) {
                 var buyingPrice = Math.floor(numericCardSellPrice * 0.95);
-
-                
-
                 document.getElementById('resultBox').value = formatAsCoins(buyingPrice);
             } else {
                 document.getElementById('resultBox').value = 'Please enter a valid number.';
@@ -248,15 +221,13 @@ function updateContent() {
             return new Intl.NumberFormat(currentLanguage).format(number) + ' coins';
         }
 
-        // Initialize content based on the default language and mode
         updateContent();
         updateMode();
     </script>
 </head>
 <body>
     <div class="navbar">
-        <i class="moon-emoji fas fa-moon" onclick="toggleMode()"></i> <!-- Moon emoji for dark/light mode toggle -->
-        <div class="spacer"></div> <!-- Spacer to create space between the moon emoji and languages -->
+        <i class="moon-emoji fas fa-moon" onclick="toggleMode()"></i>
         <div class="language-dropdown">
             <span class="language-toggle">Languages</span>
             <div class="language-dropdown-content">
@@ -277,14 +248,12 @@ function updateContent() {
 
     <p id="resultLabel">Profit after tax:</p>
     <input type="text" id="resultBox" readonly>
-    
-    <br><br>
-    <!-- About paragraph -->
+
     <h2 id="aboutHeader-en">About</h2>
-<h2 id="aboutHeader-es" style="display: none;">Sobre</h2>
-<h2 id="aboutHeader-pt" style="display: none;">Sobre</h2>
-<h2 id="aboutHeader-fr" style="display: none;">À propos</h2>
-<h2 id="aboutHeader-it" style="display: none;">Informazioni</h2>
-    <p id="aboutParagraph" style="margin: 10px 150px; text-align: center;">Welcome to our EA FC 24 Ultimate Team (UT) Tax Calculator – a tool made to help players calculate their market transactions. Our platform calculates the 5% transaction tax imposed by EAFC, letting you know how much profit you will make after selling a card on the Transfer Market. Simply enter the selling price of your player or item, and let our tool do the rest. This is the first release of the website, but we will continue to add new tools and updates throughout.</p>
+    <h2 id="aboutHeader-es" style="display: none;">Sobre</h2>
+    <h2 id="aboutHeader-pt" style="display: none;">Sobre</h2>
+    <h2 id="aboutHeader-fr" style="display: none;">À propos</h2>
+    <h2 id="aboutHeader-it" style="display: none;">Informazioni</h2>
+    <p id="aboutParagraph">Welcome to our EA FC 24 Ultimate Team (UT) Tax Calculator – a tool made to help players calculate their market transactions. Our platform calculates the 5% transaction tax imposed by EAFC, letting you know how much profit you will make after selling a card on the Transfer Market. Simply enter the selling price of your player or item, and let our tool do the rest. This is the first release of the website, but we will continue to add new tools and updates throughout.</p>
 </body>
 </html>
