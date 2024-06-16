@@ -109,6 +109,10 @@
             background-color: #f1f1f1;
         }
 
+        #aboutSection {
+            margin-top: 50px; /* Adjust this value to move the section further down */
+        }
+
         #aboutParagraph {
             max-width: 800px;
             margin: 20px auto;
@@ -192,8 +196,8 @@
             updateContent();
 
             var languages = ['en', 'es', 'pt', 'fr', 'it'];
-            languages.forEach(function (language) {
-                document.getElementById('aboutHeader-' + language).style.display = (language === lang) ? 'block' : 'none';
+            languages.forEach(function(lang) {
+                document.getElementById('aboutHeader-' + lang).style.display = (currentLanguage === lang) ? 'block' : 'none';
             });
         }
 
@@ -249,11 +253,13 @@
     <p id="resultLabel">Profit after tax:</p>
     <input type="text" id="resultBox" readonly>
 
-    <h2 id="aboutHeader-en">About</h2>
-    <h2 id="aboutHeader-es" style="display: none;">Sobre</h2>
-    <h2 id="aboutHeader-pt" style="display: none;">Sobre</h2>
-    <h2 id="aboutHeader-fr" style="display: none;">À propos</h2>
-    <h2 id="aboutHeader-it" style="display: none;">Informazioni</h2>
-    <p id="aboutParagraph">Welcome to our EA FC 24 Ultimate Team (UT) Tax Calculator – a tool made to help players calculate their market transactions. Our platform calculates the 5% transaction tax imposed by EAFC, letting you know how much profit you will make after selling a card on the Transfer Market. Simply enter the selling price of your player or item, and let our tool do the rest. This is the first release of the website, but we will continue to add new tools and updates throughout.</p>
+    <div id="aboutSection">
+        <h2 id="aboutHeader-en">About</h2>
+        <h2 id="aboutHeader-es" style="display: none;">Sobre</h2>
+        <h2 id="aboutHeader-pt" style="display: none;">Sobre</h2>
+        <h2 id="aboutHeader-fr" style="display: none;">À propos</h2>
+        <h2 id="aboutHeader-it" style="display: none;">Informazioni</h2>
+        <p id="aboutParagraph">Welcome to our EA FC 24 Ultimate Team (UT) Tax Calculator – a tool made to help players calculate their market transactions. Our platform calculates the 5% transaction tax imposed by EAFC, letting you know how much profit you will make after selling a card on the Transfer Market. Simply enter the selling price of your player or item, and let our tool do the rest. This is the first release of the website, but we will continue to add new tools and updates throughout.</p>
+    </div>
 </body>
 </html>
